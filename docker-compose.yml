@@ -1,0 +1,12 @@
+services:
+  import:
+    build: .
+    volumes:
+      - ./chat:/data
+    environment:
+      CHAT_DIR: /data
+      MATRIX_AS_TOKEN: ${MATRIX_AS_TOKEN}
+      HOMESERVER_URL: ${HOMESERVER_URL}
+      OWNER_MXID: ${OWNER_MXID}
+      SERVER_NAME: ${SERVER_NAME}
+      SENDER_MAP: ${SENDER_MAP:-}

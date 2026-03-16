@@ -1,0 +1,9 @@
+.venv
+.git
+.claude
+__pycache__
+chat
+*.egg-info
+.env
+.envrc
+import_progress.json
