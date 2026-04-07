@@ -63,6 +63,28 @@ except ImportError:
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
+
+def load_dotenv():
+    """Load .env file from script directory into os.environ (existing vars take precedence)."""
+    env_path = SCRIPT_DIR / ".env"
+    if not env_path.is_file():
+        return
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            key, _, value = line.partition("=")
+            if not _:
+                continue
+            key = key.strip()
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+                value = value[1:-1]
+            if key not in os.environ:
+                os.environ[key] = value
+
+
 # Discord markdown → HTML
 FORMAT_RULES = [
     # **bold**
@@ -306,6 +328,7 @@ class MatrixAPI:
         body = {
             "visibility": "private",
             "preset": "private_chat",
+            "is_direct": False,
             "creation_content": {
                 "m.federate": False,
             },
@@ -1149,6 +1172,7 @@ def do_import(channel_info: dict, messages: list[dict],
 # ---------------------------------------------------------------------------
 
 def main():
+    load_dotenv()
     args = parse_args()
 
     if args.generate_config:
